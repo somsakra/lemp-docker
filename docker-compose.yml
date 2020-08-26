@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  nginx:
+    image: nginx   
+    container_name: nginx 
+    volumes:
+      - type: bind
+        source: ./html
+        target: /var/www/html
+      - type: bind
+        source: ./nginx/conf/nginx.conf
+        target: /etc/nginx/conf/nginx.conf
+      - type: bind
+        source: ./nginx/conf.d/default.conf
+        target: /etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    networks:
+      - default
+
+  php:
+    build: .
+    container_name: php
+    volumes:
+    - type: bind
+      source: ./html
+      target: /var/www/html
+    networks:
+      - default
+  
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    # command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - type: bind
+        source: ./mariadb
+        target: /var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rd
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpressP@ssw0rd
+    networks:
+      - default
+
+networks:
+  default:
+    external: 
+      name: lemp
