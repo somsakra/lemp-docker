@@ -9,4 +9,4 @@ docker network create lemp
 ```
 docker-compose up
 ```
-### mysql folder will creat for /var/lib/mysql
+### mariadb folder will creat for /var/lib/mysql
